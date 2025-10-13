@@ -48,6 +48,7 @@ const RegisterScreen: React.FC<Props> = ({ navigation }) => {
       Alert.alert('Success', 'Account created successfully!');
     } catch (err: any) {
       Alert.alert('Registration failed', err.message || 'Please try again later');
+      console.log(err.message[0]);
     } finally {
       setLoading(false);
     }

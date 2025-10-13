@@ -52,17 +52,51 @@ export const AuthService = {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name, email, password, password_confirmation }),
     });
-
-    if (!res.ok) {
-      const errorText = await res.text();
-      throw new Error(errorText || 'Registration failed');
+    let data;
+    try {
+      data = await res.json();
+    } catch {
+      throw new Error('Invalid server response');
     }
 
-    return res.json();
+    if (!res.ok) {
+      // Handle Laravel validation errors
+      if (data?.errors?.email) {
+        throw new Error(data.errors.email[0]);
+      } else if (data?.message) {
+        throw new Error(data.message);
+      } else {
+        throw new Error('Registration failed. Please try again.');
+      }
+    }
+
+    return data;
   },
 
-  logout: async () => {
-    await AsyncStorage.removeItem('authToken');
+  logout: async (token: string): Promise<void> => {
+    // Optional, depends if you have a logout endpoint
+    try {
+      await fetch(`${API_BASE_URL}/logout`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: 'application/json',
+        },
+      });
+    } catch (err) {
+      console.log('Logout request failed:', err);
+    }
+  },
+
+  getProfile: async (token: string) => {
+    const res = await fetch(`${API_BASE_URL}/user`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/json',
+      },
+    });
+    if (!res.ok) throw new Error('Failed to fetch profile');
+    return res.json();
   },
 
   saveToken: async (token: string) => {
@@ -72,4 +106,5 @@ export const AuthService = {
   getToken: async () => {
     return AsyncStorage.getItem('authToken');
   },
+  removeToken: () => AsyncStorage.removeItem('authToken'),
 };
