@@ -1,39 +1,30 @@
+// src/navigation/MainNavigator.tsx
 import React from 'react';
-import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { useAuth } from '../context/AuthContext';
+import { ActivityIndicator, View } from 'react-native';
 import { useTheme } from '../theme';
-import AuthStack from './AuthStack';
 import AppStack from './AppStack';
+import AuthStack from './AuthStack';
 
-const RootStack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator();
 
 const MainNavigator = () => {
-  const { colorScheme, theme } = useTheme();
+  const { token, loading } = useAuth();
+  const { theme } = useTheme();
 
-  // TODO: Replace this with actual auth state from context or redux
-  const isAuthenticated = false;
-
-  const navigationTheme = {
-    dark: colorScheme === 'dark',
-    colors: {
-      ...((colorScheme === 'dark' ? DarkTheme.colors : DefaultTheme.colors) as any),
-      background: theme.colors.background,
-      card: theme.colors.card,
-      text: theme.colors.text,
-      border: theme.colors.border,
-      primary: theme.colors.primary,
-    },
-  };
+  if (loading) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: theme.colors.background }}>
+        <ActivityIndicator size="large" color={theme.colors.primary} />
+      </View>
+    );
+  }
 
   return (
     <NavigationContainer>
-      <RootStack.Navigator screenOptions={{ headerShown: false }}>
-        {isAuthenticated ? (
-          <RootStack.Screen name="AppStack" component={AppStack} />
-        ) : (
-          <RootStack.Screen name="AuthStack" component={AuthStack} />
-        )}
-      </RootStack.Navigator>
+      {token ? <AppStack /> : <AuthStack />}
     </NavigationContainer>
   );
 };
