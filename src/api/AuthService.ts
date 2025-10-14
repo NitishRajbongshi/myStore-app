@@ -1,6 +1,9 @@
 // src/api/AuthService.ts
+import {AppConfig} from './config.ts';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-const API_BASE_URL = 'http://192.168.29.213:8000/api';
+
+// Get the base url
+const API_BASE_URL:string = AppConfig.API_BASE_URL;
 
 export interface LoginResponse {
   token: string;
@@ -74,7 +77,6 @@ export const AuthService = {
   },
 
   logout: async (token: string): Promise<void> => {
-    // Optional, depends if you have a logout endpoint
     try {
       await fetch(`${API_BASE_URL}/logout`, {
         method: 'POST',
