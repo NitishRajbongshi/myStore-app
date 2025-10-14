@@ -8,6 +8,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   Alert,
+  StyleSheet,
 } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useTheme } from '../../theme';
@@ -47,84 +48,91 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
 
   return (
     <KeyboardAvoidingView
-      style={{
-        flex: 1,
-        backgroundColor: theme.colors.background,
-        justifyContent: 'center',
-        paddingHorizontal: theme.spacing.lg,
-      }}
+      style={[
+        {
+          backgroundColor: theme.colors.background,
+          paddingHorizontal: theme.spacing.lg,
+        },
+        styles.container,
+      ]}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
       <View>
         <Text
-          style={{
-            color: theme.colors.text,
-            fontSize: 28,
-            fontWeight: '700',
-            marginBottom: theme.spacing.xl,
-            textAlign: 'center',
-          }}
+          style={[
+            {
+              color: theme.colors.text,
+              marginBottom: theme.spacing.xl,
+              fontSize: theme.fontSizes.xl,
+            },
+            styles.headingText,
+          ]}
         >
           Welcome Back 👋
         </Text>
 
         <TextInput
-          placeholder="Email"
+          placeholder="Enter Email"
           placeholderTextColor={theme.colors.subText}
           value={email}
           onChangeText={setEmail}
           keyboardType="email-address"
           autoCapitalize="none"
-          style={{
-            borderWidth: 1,
-            borderColor: theme.colors.border,
-            backgroundColor: theme.colors.card,
-            color: theme.colors.text,
-            borderRadius: theme.radii.md,
-            paddingHorizontal: theme.spacing.md,
-            paddingVertical: theme.spacing.sm,
-            marginBottom: theme.spacing.md,
-          }}
+          style={[
+            {
+              borderColor: theme.colors.border,
+              backgroundColor: theme.colors.card,
+              color: theme.colors.text,
+              borderRadius: theme.radii.md,
+              padding: theme.spacing.md,
+              marginBottom: theme.spacing.md,
+            },
+            styles.textInput,
+          ]}
         />
 
         <TextInput
-          placeholder="Password"
+          placeholder="Enter password"
           placeholderTextColor={theme.colors.subText}
           value={password}
           onChangeText={setPassword}
           secureTextEntry
-          style={{
-            borderWidth: 1,
-            borderColor: theme.colors.border,
-            backgroundColor: theme.colors.card,
-            color: theme.colors.text,
-            borderRadius: theme.radii.md,
-            paddingHorizontal: theme.spacing.md,
-            paddingVertical: theme.spacing.sm,
-            marginBottom: theme.spacing.lg,
-          }}
+          style={[
+            {
+              borderColor: theme.colors.border,
+              backgroundColor: theme.colors.card,
+              color: theme.colors.text,
+              borderRadius: theme.radii.md,
+              padding: theme.spacing.md,
+              marginBottom: theme.spacing.md,
+            },
+            styles.textInput,
+          ]}
         />
 
         <TouchableOpacity
           onPress={handleLogin}
           disabled={loading}
-          style={{
-            backgroundColor: theme.colors.primary,
-            paddingVertical: theme.spacing.md,
-            borderRadius: theme.radii.md,
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
+          style={[
+            {
+              backgroundColor: theme.colors.primary,
+              paddingVertical: theme.spacing.md,
+              borderRadius: theme.radii.md,
+            },
+            styles.btnContainer,
+          ]}
         >
           {loading ? (
             <ActivityIndicator color={theme.colors.primaryTextOn} />
           ) : (
             <Text
-              style={{
-                color: theme.colors.primaryTextOn,
-                fontWeight: '600',
-                fontSize: 16,
-              }}
+              style={[
+                {
+                  color: theme.colors.primaryTextOn,
+                  fontSize: theme.fontSizes.md,
+                },
+                styles.btnText,
+              ]}
             >
               Login
             </Text>
@@ -133,13 +141,15 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
 
         <TouchableOpacity
           onPress={() => navigation.navigate('Register')}
-          style={{ marginTop: theme.spacing.lg, alignItems: 'center' }}
+          style={[{ marginTop: theme.spacing.lg }, styles.btnContainer]}
         >
           <Text
-            style={{
-              color: theme.colors.primary,
-              fontWeight: '500',
-            }}
+            style={[
+              {
+                color: theme.colors.primary,
+              },
+              styles.btnText,
+            ]}
           >
             Don’t have an account? Register
           </Text>
@@ -148,5 +158,23 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
     </KeyboardAvoidingView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  headingText: {
+    fontWeight: '700',
+    textAlign: 'center',
+  },
+  textInput: {
+    borderWidth: 1,
+  },
+  btnContainer: { alignItems: 'center', justifyContent: 'center' },
+  btnText: {
+    fontWeight: '500',
+  },
+});
 
 export default LoginScreen;

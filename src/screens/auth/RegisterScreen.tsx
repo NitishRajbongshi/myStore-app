@@ -95,7 +95,7 @@ const RegisterScreen: React.FC<Props> = ({ navigation }) => {
         />
 
         <TextInput
-          placeholder="Email"
+          placeholder="Valid Email"
           placeholderTextColor={theme.colors.subText}
           value={email}
           onChangeText={setEmail}
@@ -114,7 +114,7 @@ const RegisterScreen: React.FC<Props> = ({ navigation }) => {
         />
 
         <TextInput
-          placeholder="Password"
+          placeholder="Strong Password"
           placeholderTextColor={theme.colors.subText}
           value={password}
           onChangeText={setPassword}
@@ -176,7 +176,7 @@ const RegisterScreen: React.FC<Props> = ({ navigation }) => {
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() => navigation.navigate('Login')}
+          onPress={() => navigation.goBack()}
           style={{ marginTop: theme.spacing.lg, alignItems: 'center' }}
         >
           <Text

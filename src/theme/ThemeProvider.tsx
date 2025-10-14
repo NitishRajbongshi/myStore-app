@@ -4,14 +4,16 @@ import { Appearance, ColorSchemeName } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ThemeTokens, ColorTokens } from './types';
 import { lightColors, darkColors } from './colors';
+import {
+  defaultSpacing,
+  defaultRadii,
+  defaultSizes,
+  defaultZ,
+  defaultFonts,
+  defaultFontSizes,
+} from './constants';
 
 const STORAGE_KEY = '@theme:colorScheme';
-
-const defaultSpacing = { xs: 4, sm: 8, md: 16, lg: 24, xl: 32 };
-const defaultRadii = { sm: 6, md: 10, lg: 16, round: 9999 };
-const defaultSizes = { avatar: 48, inputHeight: 48, icon: 20 };
-const defaultZ = { modal: 1000, toast: 1100, nav: 900 };
-const defaultFonts = { regular: 'System', medium: 'System', bold: 'System' };
 
 export const buildTheme = (colors: ColorTokens): ThemeTokens => ({
   colors,
@@ -20,6 +22,7 @@ export const buildTheme = (colors: ColorTokens): ThemeTokens => ({
   sizes: defaultSizes,
   zIndices: defaultZ,
   fonts: defaultFonts,
+  fontSizes: defaultFontSizes,
 });
 
 type ThemeContextValue = {
