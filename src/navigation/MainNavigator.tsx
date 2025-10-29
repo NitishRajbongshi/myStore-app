@@ -1,14 +1,12 @@
 // src/navigation/MainNavigator.tsx
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useAuth } from '../context/AuthContext';
-import { ActivityIndicator, View } from 'react-native';
+import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import { useTheme } from '../theme';
 import AppStack from './AppStack';
 import AuthStack from './AuthStack';
 
-const Stack = createNativeStackNavigator();
 
 const MainNavigator = () => {
   const { token, loading } = useAuth();
@@ -16,7 +14,9 @@ const MainNavigator = () => {
 
   if (loading) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: theme.colors.background }}>
+      <View
+        style={[styles.container, { backgroundColor: theme.colors.background }]}
+      >
         <ActivityIndicator size="large" color={theme.colors.primary} />
       </View>
     );
@@ -28,5 +28,11 @@ const MainNavigator = () => {
     </NavigationContainer>
   );
 };
-
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
 export default MainNavigator;

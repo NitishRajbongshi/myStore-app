@@ -1,6 +1,6 @@
 import React from 'react';
 import { ThemeProvider, useTheme } from './theme';
-import { ActivityIndicator, StatusBar, View } from 'react-native';
+import { ActivityIndicator, StatusBar, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import MainNavigator from './navigation/MainNavigator';
 import { AuthProvider } from './context/AuthContext';
@@ -8,15 +8,16 @@ import { AuthProvider } from './context/AuthContext';
 const AppInner = () => {
   const { theme, colorScheme, isReady } = useTheme();
 
+  // show loading screen
   if (!isReady) {
     return (
       <View
-        style={{
-          flex: 1,
-          backgroundColor: theme.colors.background,
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
+        style={[
+          {
+            backgroundColor: theme.colors.background,
+          },
+          styles.container,
+        ]}
       >
         <ActivityIndicator size="large" color={theme.colors.primary} />
       </View>
@@ -29,7 +30,7 @@ const AppInner = () => {
         barStyle={colorScheme === 'dark' ? 'light-content' : 'dark-content'}
       />
       <SafeAreaView
-        style={{ flex: 1, backgroundColor: theme.colors.background }}
+        style={[styles.statusBar, { backgroundColor: theme.colors.background }]}
       >
         <MainNavigator />
       </SafeAreaView>
@@ -44,5 +45,14 @@ const App = () => (
     </AuthProvider>
   </ThemeProvider>
 );
-
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  statusBar: {
+    flex: 1,
+  },
+});
 export default App;
