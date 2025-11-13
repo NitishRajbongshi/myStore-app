@@ -6,10 +6,15 @@ import {
   ActivityIndicator,
   TouchableOpacity,
   RefreshControl,
+  Button,
 } from 'react-native';
 import ProductService, { Product } from '../../api/ProductService';
 import { useTheme } from '../../theme';
 import { useAuth } from '../../context/AuthContext';
+
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useNavigation } from '@react-navigation/native';
+import { AppStackParamList } from '../../navigation/AppStack.tsx';
 
 const ProductListScreen = () => {
   const { theme } = useTheme();
@@ -19,6 +24,14 @@ const ProductListScreen = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+
+  // const navigation = useNavigation();
+  type ProductListScreenNavigationProp = NativeStackNavigationProp<
+    AppStackParamList,
+    'ProductCreate'
+  >;
+
+  const navigation = useNavigation<ProductListScreenNavigationProp>();
 
   const fetchProducts = async () => {
     try {
@@ -134,10 +147,35 @@ const ProductListScreen = () => {
             <Text style={{ color: theme.colors.primary, fontWeight: 'bold' }}>
               ₹{item.price}
             </Text>
+            <Button
+              title={'edit'}
+              onPress={() =>
+                navigation.navigate('ProductEdit', { id: item.id.toString() })
+              }
+            />
+            <Button
+              title={'view'}
+              onPress={() =>
+                navigation.navigate('ProductDetail', { id: item.id.toString() })
+              }
+            />
           </View>
         )}
       />
-
+      <TouchableOpacity
+        onPress={() => navigation.navigate('ProductCreate')}
+        style={{
+          backgroundColor: theme.colors.primary,
+          paddingVertical: theme.spacing.md,
+          alignItems: 'center',
+          borderRadius: theme.radii.md,
+          marginTop: theme.spacing.md,
+        }}
+      >
+        <Text style={{ color: theme.colors.primaryTextOn, fontWeight: '600' }}>
+          Add New Product
+        </Text>
+      </TouchableOpacity>
       <TouchableOpacity
         onPress={logout}
         style={{
