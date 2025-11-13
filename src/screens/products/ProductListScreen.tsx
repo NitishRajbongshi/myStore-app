@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -13,7 +13,7 @@ import { useTheme } from '../../theme';
 import { useAuth } from '../../context/AuthContext';
 
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { AppStackParamList } from '../../navigation/AppStack.tsx';
 
 const ProductListScreen = () => {
@@ -45,6 +45,13 @@ const ProductListScreen = () => {
       setRefreshing(false);
     }
   };
+
+  // Auto-refresh when screen focuses
+  useFocusEffect(
+    useCallback(() => {
+      fetchProducts();
+    }, [])
+  );
 
   useEffect(() => {
     fetchProducts();
