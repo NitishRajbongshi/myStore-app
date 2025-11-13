@@ -1,10 +1,10 @@
 import {
   ActivityIndicator,
   Alert,
-  Button,
   StyleSheet,
   Text,
   TextInput,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import React, { useEffect, useState } from 'react';
@@ -12,11 +12,13 @@ import { AppStackParamList } from '../../navigation/AppStack.tsx';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import ProductService from '../../api/ProductService.ts';
 import { AppConfig } from '../../api/config.ts';
+import { useTheme } from '../../theme';
 
 type Props = NativeStackScreenProps<AppStackParamList, 'ProductEdit'>;
 
 const ProductEditScreen: React.FC<Props> = ({ route, navigation }) => {
   const { id } = route.params;
+  const { theme } = useTheme();
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('');
@@ -60,7 +62,13 @@ const ProductEditScreen: React.FC<Props> = ({ route, navigation }) => {
       setLoading(false);
     }
   };
-  if (initialLoading) return <ActivityIndicator style={{ flex: 1 }} size="large" />;
+  if (initialLoading)
+    return (
+      <ActivityIndicator
+        style={styles.activityIndicatorContainer}
+        size="large"
+      />
+    );
   return (
     <View style={styles.container}>
       <Text style={styles.label}>Product Name</Text>
@@ -68,7 +76,7 @@ const ProductEditScreen: React.FC<Props> = ({ route, navigation }) => {
 
       <Text style={styles.label}>Description</Text>
       <TextInput
-        style={[styles.input, { height: 80 }]}
+        style={[styles.input, styles.descriptionInput]}
         value={description}
         multiline
         onChangeText={setDescription}
@@ -83,9 +91,35 @@ const ProductEditScreen: React.FC<Props> = ({ route, navigation }) => {
       />
 
       {loading ? (
-        <ActivityIndicator size="small" />
+        <ActivityIndicator size="large" />
       ) : (
-        <Button title="Update Product" onPress={handleUpdate} />
+        <TouchableOpacity
+          onPress={handleUpdate}
+          style={[
+            {
+              backgroundColor: theme.colors.primary,
+              paddingVertical: theme.spacing.md,
+              borderRadius: theme.radii.md,
+            },
+            styles.btnContainer,
+          ]}
+        >
+          {loading ? (
+            <ActivityIndicator color={theme.colors.primaryTextOn} />
+          ) : (
+            <Text
+              style={[
+                {
+                  color: theme.colors.primaryTextOn,
+                  fontSize: theme.fontSizes.md,
+                },
+                styles.btnText,
+              ]}
+            >
+              Update Product
+            </Text>
+          )}
+        </TouchableOpacity>
       )}
     </View>
   );
@@ -108,5 +142,19 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 8,
     marginTop: 4,
+  },
+  descriptionInput: {
+    height: 80,
+  },
+  activityIndicatorContainer: {
+    flex: 1,
+  },
+  btnContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginVertical: 20
+  },
+  btnText: {
+    fontWeight: '500',
   },
 });
